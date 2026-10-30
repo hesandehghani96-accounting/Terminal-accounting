@@ -1,45 +1,143 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#137a50">
 <title>حسابداری بازار تره‌بار</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial;background:#f4f7f5;color:#26352d}
-header{background:#137a50;color:white;padding:20px}header h2{margin:0 0 8px}.container{padding:16px;max-width:1100px;margin:auto}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card,.section{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 8px #0000000b}
-.card small{color:#718078}.card strong{display:block;font-size:21px;margin-top:12px}.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
-button{border:0;border-radius:12px;padding:16px;background:white;color:#176b49;font-size:15px;font-weight:bold;box-shadow:0 2px 7px #00000010}
-.section{margin-top:20px}#pageTitle{color:#137a50}footer{text-align:center;color:#829087;padding:25px;font-size:12px}
-@media(min-width:700px){.cards{grid-template-columns:repeat(4,1fr)}.menu{grid-template-columns:repeat(4,1fr)}}
-</style></head>
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma;background:#f3f5f8;color:#263238}
+header{background:#137a50;color:white;padding:22px}
+main{max-width:1100px;margin:auto;padding:18px}
+.card{background:white;border-radius:14px;padding:18px;margin:12px 0;box-shadow:0 2px 8px #ddd}
+input,select,textarea{width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;border-radius:9px;font-size:15px}
+button{border:0;border-radius:9px;padding:13px;margin:5px;background:#137a50;color:white;font-size:14px;cursor:pointer}
+.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.menu button{min-height:65px;background:white;color:#137a50;border:1px solid #ddd;font-weight:bold}
+table{width:100%;border-collapse:collapse;direction:rtl}
+td,th{padding:12px;border-bottom:1px solid #ddd;text-align:right}
+#app{display:none}
+</style>
+</head>
 <body>
-<header><h2>حسابداری بازار تره‌بار</h2><small>مدیریت فروش، حساب مشتریان و تسویه صاحبان بار</small></header>
-<main class="container">
-<h3 id="pageTitle">داشبورد مدیریت</h3>
-<div class="cards">
-<div class="card"><small>فروش امروز</small><strong>۰ تومان</strong></div>
-<div class="card"><small>دریافتی نقدی</small><strong>۰ تومان</strong></div>
-<div class="card"><small>مطالبات مشتریان</small><strong>۰ تومان</strong></div>
-<div class="card"><small>بدهی صاحبان بار</small><strong>۰ تومان</strong></div>
+
+<header>
+<h2>حسابداری بازار تره‌بار</h2>
+مدیریت فروش، مشتریان و تسویه حساب
+</header>
+
+<main>
+<div class="card" id="login">
+<h3>ورود به سیستم</h3>
+<input id="email" type="email" placeholder="ایمیل">
+<input id="password" type="password" placeholder="رمز عبور">
+<button onclick="login()">ورود</button>
+<p id="msg"></p>
 </div>
-<div class="section"><h3>بخش‌های حسابداری</h3><div class="menu">
-<button onclick="show('ثبت فروش و فاکتور')">🧾 ثبت فروش</button>
-<button onclick="show('مدیریت مشتریان')">👥 مشتریان</button>
-<button onclick="show('صاحبان بار و محموله‌ها')">📦 صاحبان بار</button>
-<button onclick="show('تسویه حساب صاحبان بار')">💰 تسویه صاحبان بار</button>
-<button onclick="show('دریافت و پرداخت')">💳 دریافت و پرداخت</button>
-<button onclick="show('مدیریت چک‌ها')">🏦 چک‌ها</button>
-<button onclick="show('حساب کارگران و شرکا')">👤 کارگران و شرکا</button>
-<button onclick="show('هزینه‌ها')">🧮 هزینه‌ها</button>
-<button onclick="show('گزارش فروش روزانه')">📊 آمار روزانه</button>
-<button onclick="show('گزارش سود و زیان')">📈 سود و زیان</button>
-<button onclick="show('دفتر حساب مشتریان')">📒 دفتر مشتریان</button>
-<button onclick="show('تنظیمات برنامه')">⚙️ تنظیمات</button>
-</div></div>
-<div class="section"><h3 id="sectionTitle">خوش آمدید</h3><p id="sectionText">برای شروع، یکی از بخش‌های حسابداری را انتخاب کنید.</p></div>
-</main><footer>نسخه اولیه حسابداری بازار تره‌بار</footer>
+
+<div id="app">
+<div class="card">
+<h3>داشبورد حسابداری</h3>
+<button onclick="logout()">خروج</button>
+<div class="menu" id="menu"></div>
+</div>
+<div class="card">
+<h3 id="title">خوش آمدید</h3>
+<div id="content">یک بخش را انتخاب کنید.</div>
+</div>
+</div>
+</main>
+
 <script>
-function show(name){document.getElementById('pageTitle').innerText=name;document.getElementById('sectionTitle').innerText=name;document.getElementById('sectionText').innerText='بخش '+name+' انتخاب شد. امکانات این قسمت در مراحل بعدی تکمیل می‌شود.';window.scrollTo({top:0,behavior:'smooth'});}
-</script></body></html>
+const SUPABASE_URL="https://YOUR_PROJECT_ID.supabase.co";
+const SUPABASE_KEY="YOUR_PUBLISHABLE_KEY";
+
+const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+
+const sections=[
+["customers","مشتریان"],
+["owners","صاحبان بار"],
+["products","محصولات"],
+["loads","بارهای ورودی"],
+["invoices","فاکتورهای فروش"],
+["invoice_items","جزئیات فاکتورها"],
+["transactions","دریافت و پرداخت"],
+["checks","چک‌ها"],
+["expenses","هزینه‌ها"]
+];
+
+async function login(){
+const {data,error}=await db.auth.signInWithPassword({
+email:email.value,password:password.value
+});
+msg.innerText=error?error.message:"ورود موفق";
+if(data.session) showApp();
+}
+
+async function logout(){
+await db.auth.signOut();
+location.reload();
+}
+
+async function showApp(){
+document.getElementById("login").style.display="none";
+document.getElementById("app").style.display="block";
+menu.innerHTML=sections.map(s=>
+`<button onclick="openTable('${s[0]}','${s[1]}')">${s[1]}</button>`
+).join("");
+}
+
+async function openTable(table,name){
+title.innerText=name;
+content.innerHTML="در حال دریافت اطلاعات...";
+const {data,error}=await db.from(table).select("*").limit(100);
+if(error){
+content.innerText=error.message;
+return;
+}
+if(!data.length){
+content.innerHTML=`<p>هنوز اطلاعاتی ثبت نشده است.</p>
+<button onclick="addRecord('${table}','${name}')">ثبت اطلاعات جدید</button>`;
+return;
+}
+const keys=Object.keys(data[0]);
+let html="<table><tr>"+keys.map(k=>`<th>${k}</th>`).join("")+"</tr>";
+data.forEach(row=>{
+html+="<tr>"+keys.map(k=>`<td>${row[k]??""}</td>`).join("")+"</tr>";
+});
+html+="</table>";
+html+=`<button onclick="addRecord('${table}','${name}')">ثبت اطلاعات جدید</button>`;
+content.innerHTML=html;
+}
+
+async function addRecord(table,name){
+const {data,error}=await db.from(table).select("*").limit(1);
+if(error){alert(error.message);return;}
+let fields=data?.length?Object.keys(data[0]).filter(k=>
+!["id","created_at"].includes(k)
+):[];
+if(!fields.length){
+alert("ابتدا ساختار ستون‌های این جدول باید مشخص شود.");
+return;
+}
+let values={};
+for(const field of fields){
+let value=prompt("مقدار "+field);
+if(value===null)return;
+if(value!=="")values[field]=value;
+}
+const {error:insertError}=await db.from(table).insert(values);
+if(insertError)alert(insertError.message);
+else{
+alert("اطلاعات با موفقیت ثبت شد");
+openTable(table,name);
+}
+}
+
+db.auth.getSession().then(({data})=>{
+if(data.session)showApp();
+});
+</script>
+</body>
+</html>
