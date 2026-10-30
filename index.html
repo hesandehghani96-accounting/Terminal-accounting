@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#137a50">
+<title>حسابداری بازار تره‌بار</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Tahoma,Arial;background:#f4f7f5;color:#26352d}
+header{background:#137a50;color:white;padding:20px}header h2{margin:0 0 8px}.container{padding:16px;max-width:1100px;margin:auto}
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}.card,.section{background:white;border-radius:14px;padding:18px;box-shadow:0 2px 8px #0000000b}
+.card small{color:#718078}.card strong{display:block;font-size:21px;margin-top:12px}.menu{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:20px}
+button{border:0;border-radius:12px;padding:16px;background:white;color:#176b49;font-size:15px;font-weight:bold;box-shadow:0 2px 7px #00000010}
+.section{margin-top:20px}#pageTitle{color:#137a50}footer{text-align:center;color:#829087;padding:25px;font-size:12px}
+@media(min-width:700px){.cards{grid-template-columns:repeat(4,1fr)}.menu{grid-template-columns:repeat(4,1fr)}}
+</style></head>
+<body>
+<header><h2>حسابداری بازار تره‌بار</h2><small>مدیریت فروش، حساب مشتریان و تسویه صاحبان بار</small></header>
+<main class="container">
+<h3 id="pageTitle">داشبورد مدیریت</h3>
+<div class="cards">
+<div class="card"><small>فروش امروز</small><strong>۰ تومان</strong></div>
+<div class="card"><small>دریافتی نقدی</small><strong>۰ تومان</strong></div>
+<div class="card"><small>مطالبات مشتریان</small><strong>۰ تومان</strong></div>
+<div class="card"><small>بدهی صاحبان بار</small><strong>۰ تومان</strong></div>
+</div>
+<div class="section"><h3>بخش‌های حسابداری</h3><div class="menu">
+<button onclick="show('ثبت فروش و فاکتور')">🧾 ثبت فروش</button>
+<button onclick="show('مدیریت مشتریان')">👥 مشتریان</button>
+<button onclick="show('صاحبان بار و محموله‌ها')">📦 صاحبان بار</button>
+<button onclick="show('تسویه حساب صاحبان بار')">💰 تسویه صاحبان بار</button>
+<button onclick="show('دریافت و پرداخت')">💳 دریافت و پرداخت</button>
+<button onclick="show('مدیریت چک‌ها')">🏦 چک‌ها</button>
+<button onclick="show('حساب کارگران و شرکا')">👤 کارگران و شرکا</button>
+<button onclick="show('هزینه‌ها')">🧮 هزینه‌ها</button>
+<button onclick="show('گزارش فروش روزانه')">📊 آمار روزانه</button>
+<button onclick="show('گزارش سود و زیان')">📈 سود و زیان</button>
+<button onclick="show('دفتر حساب مشتریان')">📒 دفتر مشتریان</button>
+<button onclick="show('تنظیمات برنامه')">⚙️ تنظیمات</button>
+</div></div>
+<div class="section"><h3 id="sectionTitle">خوش آمدید</h3><p id="sectionText">برای شروع، یکی از بخش‌های حسابداری را انتخاب کنید.</p></div>
+</main><footer>نسخه اولیه حسابداری بازار تره‌بار</footer>
+<script>
+function show(name){document.getElementById('pageTitle').innerText=name;document.getElementById('sectionTitle').innerText=name;document.getElementById('sectionText').innerText='بخش '+name+' انتخاب شد. امکانات این قسمت در مراحل بعدی تکمیل می‌شود.';window.scrollTo({top:0,behavior:'smooth'});}
+</script></body></html>
